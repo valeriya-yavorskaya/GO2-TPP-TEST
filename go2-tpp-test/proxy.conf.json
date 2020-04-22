@@ -1,0 +1,8 @@
+{
+  "/api": {
+    "target": "https://github.com/login/oauth",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  }
+}
