@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import * as loginActions from './login.actions';
+import { Observable } from 'rxjs';
+import { selectIsError } from '../reducers/login.reducer';
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -8,9 +11,13 @@ import * as loginActions from './login.actions';
 })
 export class LoginComponent implements OnInit {
 
+  loginError$: Observable<string>;
+
   constructor(private store: Store<any>) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.loginError$ = this.store.pipe(select(selectIsError));
+  }
 
   onLoginButtonClick() {
     this.store.dispatch(new loginActions.AuthRequest());

@@ -8,6 +8,7 @@ import * as loginActions from './login/login.actions';
 import * as dashboardActions from './dashboard/dashboard.actions';
 import { selectAccessToken } from './reducers/login.reducer';
 import { UserInfoRequest, UserReposRequest } from './dashboard/dashboard.actions';
+import { Router } from '@angular/router';
 
 export interface OAuthResponse {
   access_token: string;
@@ -23,7 +24,7 @@ export interface UserInfoResponse {
 
 @Injectable()
 export class AppEffects {
-  constructor(private actions$: Actions, private http: HttpClient, private store: Store<any>) {}
+  constructor(private actions$: Actions, private http: HttpClient, private store: Store<any>, private router: Router) {}
 
   private AUTH_URL = '/api';
   private URL = 'https://api.github.com';
@@ -71,6 +72,16 @@ export class AppEffects {
   loginSuccess$: Observable<any> = this.actions$.pipe(
     ofType(loginActions.LOGIN_SUCCESS),
     switchMap(() => [new UserInfoRequest(), new UserReposRequest()])
+  );
+
+  @Effect()
+  loginError$: Observable<any> = this.actions$.pipe(
+    ofType(loginActions.LOGIN_ERROR),
+    switchMap((action: any) => {
+      return new Observable(() => {
+        this.router.navigate(['/login-page']);
+      });
+    })
   );
 
   @Effect()
@@ -138,6 +149,6 @@ export class AppEffects {
         }),
         catchError(err => of(new dashboardActions.UserRepoContribError(err)))
       );
-    }, ),
+    }),
   );
 }

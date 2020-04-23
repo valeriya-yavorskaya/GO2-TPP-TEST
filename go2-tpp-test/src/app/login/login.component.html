@@ -1,7 +1,12 @@
 <section class="mat-typography login-page mat-app-background">
   <mat-card class="login-page__content">
-    <h2>Welcome to app!</h2>
-    <h3>Press button to log in using Github</h3>
-    <button mat-raised-button color="primary" (click)="onLoginButtonClick()">Okay</button>
+    <mat-card-title>Welcome to app!</mat-card-title>
+    <mat-card-content>
+      <span class="mat-error" *ngIf="loginError$ | async as loginError">{{loginError}}</span>
+      <h3>Press button to log in using Github</h3>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-raised-button color="primary" (click)="onLoginButtonClick()">Okay</button>
+    </mat-card-actions>
   </mat-card>
 </section>

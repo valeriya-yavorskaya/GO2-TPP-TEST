@@ -9,7 +9,7 @@ export interface LoginState {
 const initialState: LoginState = {
   inProgress: false,
   access_token: '',
-  error: '',
+  error: null,
 };
 
 export function loginReducer(state: LoginState = initialState, action: any) {
@@ -24,6 +24,7 @@ export function loginReducer(state: LoginState = initialState, action: any) {
         ...state,
         access_token: action.payload,
         inProgress: false,
+        error: null,
       };
     case loginActions.LOGIN_ERROR:
       return {
@@ -38,4 +39,8 @@ export function loginReducer(state: LoginState = initialState, action: any) {
 
 export const selectAccessToken = state => {
   return state && state.login && state.login.access_token;
+};
+
+export const selectIsError = state => {
+  return state && state.login && state.login.error;
 };
