@@ -17,6 +17,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { ReposListComponent } from './dashboard/repos-list/repos-list.component';
 import { RepoInfoComponent } from './dashboard/repo-info/repo-info.component';
+import { MatListModule } from '@angular/material/list';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import { RepoInfoComponent } from './dashboard/repo-info/repo-info.component';
     HttpClientModule,
     MatCardModule,
     MatButtonModule,
+    MatListModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

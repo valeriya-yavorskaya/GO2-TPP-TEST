@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Observable } from 'rxjs';
+import { UserRepos } from '../../reducers/dashboard.reducer';
 
 @Component({
   selector: 'app-repos-list',
@@ -7,9 +9,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ReposListComponent implements OnInit {
 
+  @Input() reposList$: Observable<UserRepos>;
+  @Output() selectRepo: EventEmitter<any> = new EventEmitter();
+
   constructor() { }
 
   ngOnInit(): void {
+  }
+
+  onSelectRepo(repo: any): void {
+    this.selectRepo.emit(repo);
   }
 
 }

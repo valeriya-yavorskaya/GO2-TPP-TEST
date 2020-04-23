@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-repo-info',
@@ -6,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./repo-info.component.scss']
 })
 export class RepoInfoComponent implements OnInit {
+
+  @Input() selectedRepo$: Observable<any>;
 
   constructor() { }
 

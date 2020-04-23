@@ -1,3 +1,27 @@
 <mat-card class="repo-info">
-  <h2>Repo info</h2>
+  <mat-card-title>Selected repository info</mat-card-title>
+  <mat-card-content>
+    <ng-container *ngIf="!(selectedRepo$ | async)">
+      <div>No repository selected</div>
+    </ng-container>
+    <ng-container *ngIf="selectedRepo$ | async as selectedRepo">
+      <mat-list>
+        <mat-list-item class="list-row">
+          <div class="list-row__title">Title</div><div class="list-row__desc">{{selectedRepo.name || 'no name'}}</div>
+        </mat-list-item>
+        <mat-list-item class="list-row">
+          <div class="list-row__title">Creation date</div><div class="list-row__desc">{{(selectedRepo.created_at | date) || 'no date'}}</div>
+        </mat-list-item>
+        <mat-list-item class="list-row">
+          <div class="list-row__title">Description</div><div class="list-row__desc">{{selectedRepo.description || 'no description'}}</div>
+        </mat-list-item>
+        <mat-list-item class="list-row">
+          <div class="list-row__title">Contributors</div>
+          <div class="list-row__desc">
+            <span *ngFor="let contrib of selectedRepo.contributors">{{contrib}}</span>
+          </div>
+        </mat-list-item>
+      </mat-list>
+    </ng-container>
+  </mat-card-content>
 </mat-card>

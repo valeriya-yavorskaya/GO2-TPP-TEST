@@ -1,3 +1,15 @@
-<mat-card class="repos-list">
-  <h2>Repos list</h2>
+<mat-card class="repos-list" *ngIf="reposList$ | async as reposList">
+  <mat-card-title>Repository list</mat-card-title>
+  <mat-card-content>
+    <ng-container *ngIf="!reposList.inProgress">
+      <mat-selection-list role="list" [multiple]="false">
+        <mat-list-option role="listitem" *ngFor="let repo of reposList.repos" (click)="onSelectRepo(repo)">
+          {{repo.full_name}}
+        </mat-list-option>
+      </mat-selection-list>
+    </ng-container>
+    <ng-container *ngIf="reposList.inProgress">
+      <div>Loading...</div>
+    </ng-container>
+  </mat-card-content>
 </mat-card>

@@ -1,4 +1,4 @@
-<section class="mat-typography dashboard-page">
+<section class="mat-typography dashboard-page mat-app-background">
   <div class="dashboard-content">
     <mat-card class="dashboard-content__user-info user-info" *ngIf="userInfo$ | async as userInfo">
       <ng-container *ngIf="!userInfo.inProgress">
@@ -10,8 +10,8 @@
       </ng-container>
     </mat-card>
     <div class="dashboard-content__repos repos">
-      <app-repos-list class="repos__repos-list"></app-repos-list>
-      <app-repo-info class="repos__repo-info"></app-repo-info>
+      <app-repos-list class="repos__repos-list" [reposList$]="userRepos$" (selectRepo)="onSelectRepo($event)"></app-repos-list>
+      <app-repo-info class="repos__repo-info" [selectedRepo$]="selectedRepo$"></app-repo-info>
     </div>
   </div>
 </section>

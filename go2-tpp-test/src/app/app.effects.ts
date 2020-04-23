@@ -7,7 +7,7 @@ import { map, catchError, switchMap, withLatestFrom } from 'rxjs/operators';
 import * as loginActions from './login/login.actions';
 import * as dashboardActions from './dashboard/dashboard.actions';
 import { selectAccessToken } from './reducers/login.reducer';
-import { UserInfoRequest } from './dashboard/dashboard.actions';
+import { UserInfoRequest, UserReposRequest } from './dashboard/dashboard.actions';
 
 export interface OAuthResponse {
   access_token: string;
@@ -70,7 +70,7 @@ export class AppEffects {
   @Effect()
   loginSuccess$: Observable<any> = this.actions$.pipe(
     ofType(loginActions.LOGIN_SUCCESS),
-    switchMap(() => [new UserInfoRequest()])
+    switchMap(() => [new UserInfoRequest(), new UserReposRequest()])
   );
 
   @Effect()
@@ -88,10 +88,55 @@ export class AppEffects {
         }
       ).pipe(
         map( (res: UserInfoResponse) => {
-          const { avatar_url, name, repos_url } = res;
-          return new dashboardActions.UserInfoSuccess({avatar_url, name, repos_url});
+          const { avatar_url, name } = res;
+          return new dashboardActions.UserInfoSuccess({avatar_url, name});
         }),
         catchError(err => of(new dashboardActions.UserInfoError(err)))
+      );
+    }, ),
+  );
+
+  @Effect()
+  userRepos$: Observable<any> = this.actions$.pipe(
+    ofType(dashboardActions.USER_REPOS_REQUEST),
+    withLatestFrom(this.store.pipe(select(selectAccessToken))),
+    switchMap(([action, accessToken]: [any, string]) => {
+      return this.http.get(
+        `${this.URL}/user/repos?` +
+        `access_token=` + accessToken,
+        {
+          headers: {
+            Accept: 'application/json',
+          }
+        }
+      ).pipe(
+        map( (res: UserInfoResponse) => {
+          return new dashboardActions.UserReposSuccess(res);
+        }),
+        catchError(err => of(new dashboardActions.UserReposError(err)))
+      );
+    }, ),
+  );
+
+  @Effect()
+  userRepoContributors$: Observable<any> = this.actions$.pipe(
+    ofType(dashboardActions.USER_REPO_CONTRIB_REQUEST),
+    withLatestFrom(this.store.pipe(select(selectAccessToken))),
+    switchMap(([action, accessToken]: [any, string]) => {
+      const { name, login } = action.payload;
+      return this.http.get(
+        `${this.URL}/repos/${login}/${name}/contributors?` +
+        `access_token=` + accessToken,
+        {
+          headers: {
+            Accept: 'application/json',
+          }
+        }
+      ).pipe(
+        map( (res: UserInfoResponse) => {
+          return new dashboardActions.UserRepoContribSuccess(res);
+        }),
+        catchError(err => of(new dashboardActions.UserRepoContribError(err)))
       );
     }, ),
   );
