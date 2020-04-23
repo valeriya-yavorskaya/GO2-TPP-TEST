@@ -1,0 +1,41 @@
+.dashboard-page {
+  width: 100%;
+  height: 100%;
+}
+
+.dashboard-content {
+  margin: 200px auto auto;
+  width: 1000px;
+  display: flex;
+  flex-direction: column;
+
+  &__user-info {
+    margin-bottom: 30px;
+  }
+
+  &__repos {
+    display: flex;
+    flex-direction: row;
+  }
+}
+
+.user-info {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  &__avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 1px solid grey;
+    object-fit: cover;
+    margin-right: 30px;
+  }
+}
+
+.repos {
+  &__repos-list, &__repo-info {
+    width: 50%;
+  }
+}

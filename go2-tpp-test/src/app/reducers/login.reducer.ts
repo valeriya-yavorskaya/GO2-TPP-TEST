@@ -35,3 +35,7 @@ export function loginReducer(state: LoginState = initialState, action: any) {
       return state;
   }
 }
+
+export const selectAccessToken = state => {
+  return state && state.login && state.login.access_token;
+};

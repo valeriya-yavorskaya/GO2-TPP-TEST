@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Store, select } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { selectUserInfo, UserInfo } from '../reducers/dashboard.reducer';
 
 @Component({
   selector: 'app-dashboard',
@@ -7,9 +10,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DashboardComponent implements OnInit {
 
-  constructor() { }
+  userInfo$: Observable<UserInfo>;
+
+  constructor(private store: Store<any>) { }
 
   ngOnInit(): void {
+    this.userInfo$ = this.store.pipe(select(selectUserInfo));
   }
 
 }

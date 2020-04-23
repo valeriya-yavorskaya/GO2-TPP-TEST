@@ -15,12 +15,16 @@ import { LoginComponent } from './login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
+import { ReposListComponent } from './dashboard/repos-list/repos-list.component';
+import { RepoInfoComponent } from './dashboard/repo-info/repo-info.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    DashboardComponent
+    DashboardComponent,
+    ReposListComponent,
+    RepoInfoComponent
   ],
   imports: [
     BrowserModule,

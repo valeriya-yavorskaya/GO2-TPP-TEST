@@ -1,1 +1,17 @@
-<p>dashboard works!</p>
+<section class="mat-typography dashboard-page">
+  <div class="dashboard-content">
+    <mat-card class="dashboard-content__user-info user-info" *ngIf="userInfo$ | async as userInfo">
+      <ng-container *ngIf="!userInfo.inProgress">
+        <img [src]="userInfo.avatar_url"  alt="user-image" class="user-info__avatar"/>
+        <h2>{{userInfo.name}}</h2>
+      </ng-container>
+      <ng-container *ngIf="userInfo.inProgress">
+        <div>Loading...</div>
+      </ng-container>
+    </mat-card>
+    <div class="dashboard-content__repos repos">
+      <app-repos-list class="repos__repos-list"></app-repos-list>
+      <app-repo-info class="repos__repo-info"></app-repo-info>
+    </div>
+  </div>
+</section>
