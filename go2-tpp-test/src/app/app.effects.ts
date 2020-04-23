@@ -6,13 +6,18 @@ import { Observable, of } from 'rxjs';
 import { map, catchError, switchMap } from 'rxjs/operators';
 import * as loginActions from './login/login.actions';
 
+export interface OAuthResponse {
+  access_token: string;
+  scope: string;
+  token_type: string;
+}
+
 @Injectable()
 export class AppEffects {
   constructor(private actions$: Actions, private http: HttpClient) {}
 
-  private AUTH_URL = 'https://github.com/login/oauth';
+  private AUTH_URL = '/api';
   private URL = 'https://api.github.com';
-  private LOCAL_STORAGE_KEY = 'code';
   private CLIENT_ID = '03d3e02b94abe627d8ce';
   private CLIENT_SECRET = 'bb2af8aa74eb6a1dd7a7d327782f4b5981bd3723';
 
@@ -21,7 +26,7 @@ export class AppEffects {
     ofType(loginActions.AUTH_REQUEST),
     switchMap(() => {
       return new Observable(() => {
-        window.open(this.AUTH_URL + '/authorize?' + 'client_id=' + this.CLIENT_ID);
+        window.open(`${this.AUTH_URL}/authorize?client_id=${this.CLIENT_ID}`);
       });
     })
   );
@@ -30,18 +35,24 @@ export class AppEffects {
   login$: Observable<any> = this.actions$.pipe(
     ofType(loginActions.LOGIN_REQUEST),
     switchMap((action: any) => {
-      return this.http.post('/api/access_token?' +
-        'client_id=03d3e02b94abe627d8ce&' +
-        'client_secret=bb2af8aa74eb6a1dd7a7d327782f4b5981bd3723&' +
-        'code=' + action.payload, {}
+      return this.http.post(
+        `${this.AUTH_URL}/access_token?` +
+        `client_id=${this.CLIENT_ID}&` +
+        `client_secret=${this.CLIENT_SECRET}&` +
+        `code=` + action.payload,
+        {},
+        {
+          headers: {
+            Accept: 'application/json',
+          }
+        }
       ).pipe(
-          map((data: any) => {
-            console.log(data);
-            // localStorage.setItem(this.LOCAL_STORAGE_KEY, data.access_token);
-            return new loginActions.LoginSuccess(data);
+          map( (res: OAuthResponse) => {
+            const { access_token } = res;
+            return access_token ? new loginActions.LoginSuccess(access_token) : new loginActions.LoginError('The code passed is incorrect or expired.');
           }),
           catchError(err => of(new loginActions.LoginError(err)))
         );
-    })
+    }, ),
   );
 }
