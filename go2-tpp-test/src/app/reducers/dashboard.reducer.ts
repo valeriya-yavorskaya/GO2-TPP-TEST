@@ -96,14 +96,6 @@ export function dashboardReducer(state: DashboardState = initialState, action: a
           selectedRepo: selectRepoById(state.userRepos.repos, action.payload),
         },
       };
-    case dashboardActions.USER_REPO_CONTRIB_REQUEST:
-      return {
-        ...state,
-        userRepos: {
-          ...state.userRepos,
-          inProgress: true
-        },
-      };
     case dashboardActions.USER_REPO_CONTRIB_SUCCESS:
       return {
         ...state,
@@ -113,7 +105,6 @@ export function dashboardReducer(state: DashboardState = initialState, action: a
             ...state.userRepos.selectedRepo,
             contributors: makeContributorsNamesList(action.payload),
           },
-          inProgress: false,
         },
       };
     case dashboardActions.USER_REPO_CONTRIB_ERROR:
@@ -121,7 +112,6 @@ export function dashboardReducer(state: DashboardState = initialState, action: a
         ...state,
         userRepos: {
           ...state.userRepos,
-          inProgress: false,
           error: action.payload,
         }
       };
